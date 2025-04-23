@@ -61,22 +61,29 @@
       text-align: center;
       margin-top: 10px;
     }
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h2>Login</h2>
     <form id="login-form">
-      <input type="text" name="username" placeholder="Username" required><br>
-      <input type="password" name="password" placeholder="Password" required><br>
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
-    <p id="login-message" style="text-align: center; color: red;"></p>
-    <div class="switch-link">
-      <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
-    </div>
     <div id="loading" class="loading">
       <p>Loading...</p>
+    </div>
+    <div class="message">
+      <p id="login-message"></p>
+    </div>
+    <div class="switch-link">
+      <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
     </div>
   </div>
 
@@ -84,23 +91,27 @@
     document.getElementById("login-form").addEventListener("submit", async function(e) {
       e.preventDefault();
       const formData = new FormData(this);
-      
-      // Menampilkan loading spinner
+      const messageBox = document.getElementById("login-message");
+
+      // Tampilkan loading
       document.getElementById("loading").style.display = "block";
-      document.getElementById("login-message").innerText = ""; // Clear previous messages
+      messageBox.innerText = "";
+      messageBox.style.color = "red";
 
       try {
-        const res = await fetch("https://223a-114-10-45-96.ngrok-free.app/login.php", {
+        const res = await fetch("https://09b4-114-10-45-96.ngrok-free.app/login.php", {
           method: "POST",
           body: formData
         });
 
         const text = await res.text();
-        document.getElementById("login-message").innerText = text; // Menampilkan pesan login
+        messageBox.innerText = text;
+        if (text.includes("sukses")) {
+          messageBox.style.color = "green";
+        }
       } catch (error) {
-        document.getElementById("login-message").innerText = "Terjadi kesalahan. Silakan coba lagi.";
+        messageBox.innerText = "Terjadi kesalahan. Silakan coba lagi.";
       } finally {
-        // Sembunyikan loading spinner setelah selesai
         document.getElementById("loading").style.display = "none";
       }
     });
