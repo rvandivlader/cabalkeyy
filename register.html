@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - Cabal EP33</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    .form-container h2 {
+      text-align: center;
+      color: #333;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    .form-container .switch-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .form-container .switch-link a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+    .form-container .switch-link a:hover {
+      text-decoration: underline;
+    }
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Create Account</h2>
+    <form id="register-form">
+      <input type="text" name="username" id="username" placeholder="Username" required><br>
+      <input type="password" name="password" id="password" placeholder="Password" required><br>
+      <button type="submit">Create Account</button>
+    </form>
+    <div id="loading" class="loading">
+      <p>Loading...</p>
+    </div>
+    <div class="message">
+      <p id="register-message" style="color: red;"></p>
+    </div>
+    <div class="switch-link">
+      <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("register-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      // Menampilkan loading spinner
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("register-message").innerText = ""; // Clear previous messages
+
+      try {
+        const res = await fetch("https://b759-114-10-45-96.ngrok-free.app/register.php", {
+          method: "POST",
+          body: formData
+        });
+
+        const text = await res.text();
+        document.getElementById("register-message").innerText = text; // Menampilkan pesan registrasi
+      } catch (error) {
+        document.getElementById("register-message").innerText = "Terjadi kesalahan. Silakan coba lagi.";
+      } finally {
+        // Sembunyikan loading spinner setelah selesai
+        document.getElementById("loading").style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
