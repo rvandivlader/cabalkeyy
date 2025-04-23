@@ -66,6 +66,12 @@
       margin-top: 10px;
       font-size: 14px;
     }
+    .message.success {
+      color: green;
+    }
+    .message.error {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -96,7 +102,7 @@
       // Tampilkan loading
       document.getElementById("loading").style.display = "block";
       messageBox.innerText = "";
-      messageBox.style.color = "red";
+      messageBox.className = "message"; // reset previous message class
 
       try {
         const res = await fetch("https://09b4-114-10-45-96.ngrok-free.app/login.php", {
@@ -106,11 +112,16 @@
 
         const text = await res.text();
         messageBox.innerText = text;
+
+        // Cek jika login berhasil
         if (text.includes("sukses")) {
-          messageBox.style.color = "green";
+          messageBox.classList.add("success");
+        } else {
+          messageBox.classList.add("error");
         }
       } catch (error) {
         messageBox.innerText = "Terjadi kesalahan. Silakan coba lagi.";
+        messageBox.classList.add("error");
       } finally {
         document.getElementById("loading").style.display = "none";
       }
