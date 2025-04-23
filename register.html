@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create Account - Cabal EP33</title>
   <style>
     body {
@@ -72,8 +72,8 @@
   <div class="form-container">
     <h2>Create Account</h2>
     <form id="register-form">
-      <input type="text" name="username" id="username" placeholder="Username" required><br>
-      <input type="password" name="password" id="password" placeholder="Password" required><br>
+      <input type="text" name="username" id="username" placeholder="Username" required />
+      <input type="password" name="password" id="password" placeholder="Password" required />
       <button type="submit">Create Account</button>
     </form>
     <div id="loading" class="loading">
@@ -88,27 +88,31 @@
   </div>
 
   <script>
-    document.getElementById("register-form").addEventListener("submit", async function(e) {
+    document.getElementById("register-form").addEventListener("submit", async function (e) {
       e.preventDefault();
       const formData = new FormData(this);
+      const message = document.getElementById("register-message");
+      const loading = document.getElementById("loading");
 
-      // Menampilkan loading spinner
-      document.getElementById("loading").style.display = "block";
-      document.getElementById("register-message").innerText = ""; // Clear previous messages
+      message.innerText = "";
+      loading.style.display = "block";
 
       try {
         const res = await fetch("https://223a-114-10-45-96.ngrok-free.app/register.php", {
           method: "POST",
-          body: formData
+          body: formData,
+          headers: {
+            "ngrok-skip-browser-warning": "true"
+          }
         });
 
         const text = await res.text();
-        document.getElementById("register-message").innerText = text; // Menampilkan pesan registrasi
+        message.style.color = text.toLowerCase().includes("berhasil") ? "green" : "red";
+        message.innerText = text.trim();
       } catch (error) {
-        document.getElementById("register-message").innerText = "Terjadi kesalahan. Silakan coba lagi.";
+        message.innerText = "Terjadi kesalahan koneksi. Silakan coba lagi.";
       } finally {
-        // Sembunyikan loading spinner setelah selesai
-        document.getElementById("loading").style.display = "none";
+        loading.style.display = "none";
       }
     });
   </script>
